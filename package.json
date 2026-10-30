@@ -1,0 +1,19 @@
+{
+  "name": "remotebridge-leaderboard-exercise",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "db:reset": "node scripts/reset-db.js",
+    "start": "node src/server.js",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
