@@ -18,6 +18,12 @@
 - Starter test suite passed before feature implementation.
 - Name-helper tests and existing roster tests passed after adding
   opt-in last-name abbreviation.
+- Leaderboard core tests and the full test suite passed.
+- Verified the seeded leaderboard endpoint using the fixed demo clock.
+- Edge-case tests passed for competition ranking, alphabetical ties,
+  unrounded averages, inclusive time boundaries, session eligibility,
+  score units, zero scores, tenant isolation, and the ten-entry limit.
+- Full test suite passed after adding edge-case coverage.
 
 ## Before production
 
