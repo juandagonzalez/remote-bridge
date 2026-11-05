@@ -1,0 +1,393 @@
+.leaderboard {
+  min-width: 0;
+  overflow: hidden;
+
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+
+  box-shadow: 0 6px 24px rgb(24 40 63 / 2%);
+}
+
+.leaderboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 30px 32px 24px;
+}
+
+.leaderboard__header h1 {
+  margin: 0;
+
+  font-size: clamp(24px, 3vw, 30px);
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -0.9px;
+}
+
+.leaderboard__window {
+  margin: 10px 0 0;
+  color: var(--muted);
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.refresh-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  padding: 10px 14px;
+
+  background: var(--surface);
+  color: var(--ink);
+
+  border: 1px solid var(--line);
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background: var(--canvas);
+  border-color: #b9bfca;
+}
+
+.refresh-button:disabled {
+  background: #f6f7f9;
+  color: var(--muted);
+}
+
+.leaderboard__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  margin: 0 32px 28px;
+
+  background: #f8f9fb;
+  border: 1px solid #edf0f4;
+  border-radius: 12px;
+}
+
+.leaderboard__metrics > div {
+  padding: 18px 22px;
+}
+
+.leaderboard__metrics > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.leaderboard__metrics dt {
+  margin-bottom: 8px;
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.leaderboard__metrics dd {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard__metrics dd span {
+  color: var(--muted);
+
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.leaderboard__table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.leaderboard__table-wrapper:focus-visible {
+  outline-offset: -4px;
+}
+
+.leaderboard__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard__table th,
+.leaderboard__table td {
+  padding: 20px 24px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.leaderboard__table thead {
+  background: #fafbfc;
+  color: var(--muted);
+
+  border-top: 1px solid var(--line);
+
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.leaderboard__table thead th {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-weight: 650;
+}
+
+.leaderboard__table tbody tr {
+  border-top: 1px solid #eef0f3;
+}
+
+.leaderboard__table tbody th {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.leaderboard__table tbody tr.is-leading {
+  background: #fff7ee;
+}
+
+.leaderboard__table tbody tr:not(.is-leading):hover {
+  background: #fcfbfd;
+}
+
+.leaderboard__table .leaderboard__rank {
+  width: 88px;
+  padding-right: 12px;
+  padding-left: 24px;
+  text-align: center;
+}
+
+.leaderboard__table .leaderboard__numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard__table th:last-child,
+.leaderboard__table td:last-child {
+  padding-right: 32px;
+}
+
+.rank-badge {
+  display: inline-grid;
+  place-items: center;
+
+  width: 32px;
+  height: 32px;
+
+  color: var(--muted);
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.rank-badge--first {
+  background: #ffdfba;
+  color: #8f370a;
+}
+
+.learner-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.learner-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  background: var(--purple-soft);
+  color: var(--purple);
+  border-radius: 50%;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.is-leading .learner-avatar {
+  background: #ffe3c8;
+  color: #8f370a;
+}
+
+.score-value {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.score-track {
+  display: block;
+
+  width: 64px;
+  height: 3px;
+  margin: 7px 0 0 auto;
+
+  overflow: hidden;
+  background: #ede7f2;
+  border-radius: 4px;
+}
+
+.score-track > span {
+  display: block;
+  height: 100%;
+  background: var(--purple);
+}
+
+.is-leading .score-track {
+  background: #f4dec9;
+}
+
+.is-leading .score-track > span {
+  background: var(--orange);
+}
+
+.session-count {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.leaderboard__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 240px;
+  padding: 32px 24px;
+
+  text-align: center;
+}
+
+.leaderboard__state p {
+  max-width: 380px;
+  margin: 0;
+
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.primary-button {
+  min-height: 44px;
+  margin-top: 20px;
+  padding: 10px 20px;
+
+  background: var(--ink);
+  color: #fff;
+
+  border: 1px solid var(--ink);
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.primary-button:hover {
+  background: #2c3e57;
+}
+
+.table-scroll-hint {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .leaderboard__header {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px 20px;
+  }
+
+  .leaderboard__window {
+    font-size: 11px;
+  }
+
+  .refresh-button {
+    flex: 0 0 44px;
+    width: 44px;
+    padding: 0;
+  }
+
+  .refresh-button > span {
+    display: none;
+  }
+
+  .leaderboard__metrics {
+    margin: 0 20px 24px;
+  }
+
+  .leaderboard__metrics > div {
+    padding: 16px 14px;
+  }
+
+  .leaderboard__metrics dt {
+    font-size: 11px;
+  }
+
+  .leaderboard__metrics dd {
+    font-size: 25px;
+  }
+
+  .leaderboard__metrics dd span {
+    font-size: 11px;
+  }
+
+  .leaderboard__table th,
+  .leaderboard__table td {
+    padding: 18px 14px;
+  }
+
+  .leaderboard__table .leaderboard__rank {
+    width: 64px;
+    padding-right: 8px;
+    padding-left: 16px;
+  }
+
+  .leaderboard__table th:last-child,
+  .leaderboard__table td:last-child {
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 540px) {
+  .leaderboard__table {
+    min-width: 430px;
+  }
+
+  .table-scroll-hint {
+    display: block;
+    margin: 0;
+    padding: 0 20px 12px;
+
+    color: var(--muted);
+    font-size: 11px;
+  }
+}
