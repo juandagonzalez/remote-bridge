@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { getJson } from './api';
 import './Leaderboard.css';
 
@@ -13,35 +13,66 @@ function formatDate(value) {
   return dateFormatter.format(new Date(value));
 }
 
+function RefreshIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M20 7v5h-5M4 17v-5h5M6.1 7a7 7 0 0 1 11.5-1.4L20 8M4 16l2.4 2.4A7 7 0 0 0 17.9 17"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Leaderboard({ orgId }) {
   const headingId = useId();
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [requestVersion, setRequestVersion] = useState(0);
+
+  const [state, setState] = useState({
+    orgId,
+    status: 'loading',
+    data: null,
+  });
 
   useEffect(() => {
     let active = true;
 
-    async function loadLeaderboard() {
-      setLoading(true);
-      setError(false);
-      setData(null);
+    setState({
+      orgId,
+      status: 'loading',
+      data: null,
+    });
 
+    async function loadLeaderboard() {
       try {
-        const result = await getJson(
+        const data = await getJson(
           `/api/orgs/${encodeURIComponent(orgId)}/leaderboard`
         );
 
         if (active) {
-          setData(result);
+          setState({
+            orgId,
+            status: 'success',
+            data,
+          });
         }
       } catch {
         if (active) {
-          setError(true);
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
+          setState({
+            orgId,
+            status: 'error',
+            data: null,
+          });
         }
       }
     }
@@ -51,7 +82,28 @@ export default function Leaderboard({ orgId }) {
     return () => {
       active = false;
     };
-  }, [orgId]);
+  }, [orgId, requestVersion]);
+
+  // Hide the previous organization's data immediately on prop changes.
+  const current =
+    state.orgId === orgId
+      ? state
+      : { status: 'loading', data: null };
+
+  const loading = current.status === 'loading';
+  const error = current.status === 'error';
+  const data = current.data;
+  const entries = data?.entries ?? [];
+
+  function reload() {
+    setState({
+      orgId,
+      status: 'loading',
+      data: null,
+    });
+
+    setRequestVersion((version) => version + 1);
+  }
 
   return (
     <section
@@ -60,81 +112,168 @@ export default function Leaderboard({ orgId }) {
       aria-busy={loading}
     >
       <header className="leaderboard__header">
-        <h2 id={headingId}>Team Leaderboard</h2>
+        <div>
+          <h1 id={headingId}>Team Leaderboard</h1>
 
-        {data && (
           <p className="leaderboard__window">
-            {formatDate(data.window.start)}
-            {' to '}
-            {formatDate(data.window.end)}
-            {' · UTC'}
+            {data
+              ? `${formatDate(data.window.start)} to ${formatDate(
+                  data.window.end
+                )} · UTC`
+              : 'Rolling 30-day window'}
           </p>
-        )}
+        </div>
+
+        <button
+          type="button"
+          className="refresh-button"
+          onClick={reload}
+          disabled={loading}
+          aria-label="Refresh leaderboard"
+        >
+          <RefreshIcon />
+          <span>Refresh</span>
+        </button>
       </header>
 
+      {data && entries.length > 0 && (
+        <dl className="leaderboard__metrics">
+          <div>
+            <dt>Learners shown</dt>
+            <dd>
+              {entries.length}
+              <span> / up to 10</span>
+            </dd>
+          </div>
+
+          <div>
+            <dt>Leading average</dt>
+            <dd>
+              {entries[0].score_pct.toFixed(1)}
+              <span>%</span>
+            </dd>
+          </div>
+        </dl>
+      )}
+
       {loading && (
-        <p className="leaderboard__message" role="status">
-          Loading leaderboard…
-        </p>
+        <div className="leaderboard__state">
+          <p role="status">Loading leaderboard…</p>
+        </div>
       )}
 
-      {!loading && error && (
-        <p
-          className="leaderboard__message leaderboard__message--error"
-          role="alert"
-        >
-          We couldn’t load the leaderboard. Please refresh the page to try again.
-        </p>
+      {error && (
+        <div className="leaderboard__state">
+          <p role="alert">We couldn’t load the leaderboard.</p>
+
+          <button
+            type="button"
+            className="primary-button"
+            onClick={reload}
+          >
+            Try again
+          </button>
+        </div>
       )}
 
-      {!loading && data && data.entries.length === 0 && (
-        <p className="leaderboard__message">
-          No one has qualified yet. Complete 3 practice sessions to join the board.
-        </p>
+      {data && entries.length === 0 && (
+        <div className="leaderboard__state">
+          <p>
+            No one has qualified yet. Complete 3 practice sessions to
+            join the board.
+          </p>
+        </div>
       )}
 
-      {!loading && data && data.entries.length > 0 && (
+      {data && entries.length > 0 && (
         <>
-          <p className="leaderboard__description">
-            Ranked by average score · At least 3 completed, scored sessions
+          <p className="table-scroll-hint">
+            Scroll sideways to see all columns.
           </p>
 
-          <div className="leaderboard__table-wrapper">
+          <div
+            className="leaderboard__table-wrapper"
+            role="region"
+            aria-label="Leaderboard results"
+            tabIndex={0}
+          >
             <table className="leaderboard__table">
-              <caption className="leaderboard__sr-only">
+              <caption className="sr-only">
                 Team leaderboard ranked by average practice score
               </caption>
 
               <thead>
                 <tr>
-                  <th scope="col" className="leaderboard__number">
+                  <th scope="col" className="leaderboard__rank">
                     Rank
                   </th>
                   <th scope="col">Name</th>
-                  <th scope="col" className="leaderboard__number">
+                  <th scope="col" className="leaderboard__numeric">
                     Score
                   </th>
-                  <th scope="col" className="leaderboard__number">
+                  <th scope="col" className="leaderboard__numeric">
                     Sessions
                   </th>
                 </tr>
               </thead>
 
               <tbody>
-                {data.entries.map((entry) => (
+                {entries.map((entry) => (
                   <tr
                     key={entry.learner_id}
                     className={
-                      entry.rank === 1 ? 'leaderboard__leader' : undefined
+                      entry.rank === 1 ? 'is-leading' : undefined
                     }
                   >
-                    <td className="leaderboard__number">{entry.rank}</td>
-                    <th scope="row">{entry.display_name}</th>
-                    <td className="leaderboard__number">
-                      {entry.score_pct.toFixed(1)}%
+                    <td className="leaderboard__rank">
+                      <span
+                        className={
+                          entry.rank === 1
+                            ? 'rank-badge rank-badge--first'
+                            : 'rank-badge'
+                        }
+                      >
+                        {entry.rank}
+                      </span>
                     </td>
-                    <td className="leaderboard__number">
-                      {entry.session_count}
+
+                    <th scope="row">
+                      <span className="learner-name">
+                        <span
+                          className="learner-avatar"
+                          aria-hidden="true"
+                        >
+                          {Array.from(entry.display_name)[0]}
+                        </span>
+
+                        <span>{entry.display_name}</span>
+                      </span>
+                    </th>
+
+                    <td className="leaderboard__numeric">
+                      <span className="score-value">
+                        {entry.score_pct.toFixed(1)}%
+                      </span>
+
+                      <span
+                        className="score-track"
+                        aria-hidden="true"
+                      >
+                        <span
+                          style={{
+                            width: `${Math.max(
+                              0,
+                              Math.min(100, entry.score_pct)
+                            )}%`,
+                          }}
+                        />
+                      </span>
+                    </td>
+
+                    <td className="leaderboard__numeric">
+                      <span className="session-count">
+                        {entry.session_count}
+                      </span>
                     </td>
                   </tr>
                 ))}
