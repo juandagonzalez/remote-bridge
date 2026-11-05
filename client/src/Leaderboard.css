@@ -1,0 +1,104 @@
+.leaderboard {
+  max-width: 760px;
+  margin-top: 32px;
+  overflow: hidden;
+  color: #172033;
+  background: #fff;
+  border: 1px solid #dbe2ea;
+}
+
+.leaderboard__header {
+  padding: 24px 24px 16px;
+}
+
+.leaderboard__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.leaderboard__window {
+  margin: 8px 0 0;
+  color: #526174;
+  font-size: 0.9rem;
+}
+
+.leaderboard__description {
+  margin: 0;
+  padding: 0 24px 20px;
+  color: #526174;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.leaderboard__message {
+  margin: 0;
+  padding: 8px 24px 24px;
+  line-height: 1.6;
+}
+
+.leaderboard__message--error {
+  color: #a12622;
+}
+
+.leaderboard__table-wrapper {
+  overflow-x: auto;
+}
+
+.leaderboard__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard__table th,
+.leaderboard__table td {
+  padding: 16px 24px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.leaderboard__table thead {
+  background: #f3f6fa;
+  color: #526174;
+  font-size: 0.85rem;
+}
+
+.leaderboard__table tbody tr {
+  border-top: 1px solid #e5eaf0;
+}
+
+.leaderboard__table tbody th {
+  font-weight: 500;
+}
+
+.leaderboard__table .leaderboard__number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard__leader {
+  background: #eff8f3;
+}
+
+.leaderboard__leader th {
+  color: #18603a;
+}
+
+.leaderboard__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 480px) {
+  .leaderboard__table th,
+  .leaderboard__table td {
+    padding: 12px;
+  }
+}

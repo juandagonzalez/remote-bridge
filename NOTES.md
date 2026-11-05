@@ -24,6 +24,10 @@
   unrounded averages, inclusive time boundaries, session eligibility,
   score units, zero scores, tenant isolation, and the ten-entry limit.
 - Full test suite passed after adding edge-case coverage.
+- Client production build passed.
+- Full backend test suite passed after frontend integration.
+- Manually verified populated, loading, empty, and error states.
+- Checked the leaderboard at a narrow mobile viewport.
 
 ## Before production
 
