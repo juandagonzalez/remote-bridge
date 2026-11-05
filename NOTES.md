@@ -1,5 +1,57 @@
 # Leaderboard Exercise Notes
 
+## Running locally
+
+Prerequisites: Node 20+ and Docker with Compose.
+Use an active Node LTS release where possible.
+
+From the repository root:
+
+```bash
+npm ci
+npm run db:up
+docker compose exec db pg_isready -U postgres -d remotebridge
+npm run db:reset
+npm start
+```
+
+Wait for Postgres to report that it is accepting connections before
+resetting the database.
+
+In another terminal:
+
+```bash
+cd client
+npm ci
+npm run dev
+```
+
+Open the URL printed by Vite.
+
+Database resets and tests are destructive; use only the disposable
+local exercise database.
+
+## Deterministic demo
+
+The dated seed data may not qualify under the current real-world clock.
+To reproduce the specification's demo window, stop the normal API and
+run this from the repository root:
+
+```bash
+node -e "require('./src/lib/clock').setNow('2026-11-12T12:00:00Z'); require('./src/server')"
+```
+
+This overrides the clock only for that process. Normal `npm start`
+uses the real clock.
+
+## Verification commands
+
+```bash
+npm test
+npm --prefix client run build
+git diff --check
+```
+
 ## Decisions and assumptions
 
 - Ranking follows the written average-score rules. The example response
@@ -29,10 +81,25 @@
 - Manually verified populated, loading, empty, and error states.
 - Checked the leaderboard at a narrow mobile viewport.
 
+## Final verification
+
+- Full backend test suite passed.
+- Client production build passed.
+- Populated, loading, empty, and error states checked manually.
+- Narrow-screen layout checked manually.
+- Fixed-clock demo matched the expected average-score ordering.
+
 ## Before production
 
 - Bind organization access to the authenticated user's permissions.
 - Confirm the missing-score policy and correct the contradictory example.
+
+## With more time
+
+- Add automated frontend tests for request states and organization changes.
+- Verify keyboard and screen-reader behavior more thoroughly.
+- Measure query performance against realistic data volumes before
+  deciding whether additional indexes are necessary.
 
 ## AI collaboration
 
