@@ -1,7 +1,9 @@
-import Leaderboard from './Leaderboard.jsx';
+import React from 'react';
+import SiteHeader from './components/SiteHeader/SiteHeader.jsx';
+import Leaderboard from './components/Leaderboard/Leaderboard.jsx';
 import './App.css';
 
-// In production, derive the organization from the authenticated session.
+// In production, derive organization access from the authenticated session.
 const ORG_ID = 1;
 
 export default function App() {
@@ -11,27 +13,7 @@ export default function App() {
         Skip to leaderboard
       </a>
 
-      <header className="site-header">
-        <div className="site-header__inner">
-          <div className="brand" aria-label="RemoteBridge">
-            <span className="brand__symbol" aria-hidden="true">
-              rb
-            </span>
-
-            <span>
-              Remote<span className="brand__light">Bridge</span>
-            </span>
-          </div>
-
-          <div className="organization-chip">
-            <span
-              className="organization-chip__dot"
-              aria-hidden="true"
-            />
-            Organization {ORG_ID}
-          </div>
-        </div>
-      </header>
+      <SiteHeader orgId={ORG_ID} />
 
       <main
         id="main-content"
