@@ -1,0 +1,12 @@
+.leaderboard {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgb(24 40 63 / 2%);
+}
+
+.leaderboard__content {
+  min-width: 0;
+}
