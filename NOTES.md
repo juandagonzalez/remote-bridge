@@ -145,3 +145,10 @@ Key prompts included:
   proposed fonts, colors, and component specifications.
 - Apply a brand-inspired presentation without changing leaderboard
   rules or adding dependencies.
+  - Organize the leaderboard component and its stylesheet in a dedicated
+  component folder, updating imports without changing behavior.
+- Refactor the simplified interface into focused components: SiteHeader,
+  LeaderboardHeader, LeaderboardSummary, LeaderboardTable, and
+  LeaderboardFeedback.
+- Colocate each component with its stylesheet while keeping global design
+  tokens, accessibility utilities, and application layout in App.css.
